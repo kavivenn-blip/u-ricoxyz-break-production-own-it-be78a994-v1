@@ -32,6 +32,12 @@ def main() -> None:
     if not 1 <= len(LINE) <= 200:
         sys.exit(f"entry line must be 1-200 code points, got {len(LINE)}")
     os.makedirs("/output", exist_ok=True)
+    try:
+        # The gate reads the output folder as world-readable (0755);
+        # an existing folder keeps whatever mode it was created with.
+        os.chmod("/output", 0o755)
+    except OSError:
+        pass
     with open("/output/entry.txt", "w", encoding="utf-8", newline="") as handle:
         handle.write(LINE)
     os.chmod("/output/entry.txt", 0o644)
